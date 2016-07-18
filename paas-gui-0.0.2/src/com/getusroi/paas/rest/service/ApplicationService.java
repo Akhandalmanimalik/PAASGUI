@@ -53,7 +53,7 @@ public class ApplicationService {
 	 static final String FAILURE="failed";
 
 	 private ApplicationDAO applicationDAO=null;
-	
+	//test
 	@POST
 	@Path("/addService")
 	@Consumes(MediaType.APPLICATION_JSON)

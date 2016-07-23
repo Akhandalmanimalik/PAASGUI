@@ -39,6 +39,7 @@ public class PaasUserRegisterAndLoginDAO {
 	 private static final String CHECKEMAIl_AND_PASSWORD_EXIST_QUERY="select * from login where email_id=? and password=?";
 	 private static final String INSERT_USER_DETAILS_INTO_LOGIN = "insert into login(tenant_id,admin_id,email_id,password,role_id,createdDTM) values(?,?,?,?,?,NOW())";
 	 private static final String GET_TENANT_DETIALS_BY_TENANT_ID_QUERY = "select * from tenant where tenant_id=?";
+	 private static final String GET_TENANT_NAME_N_BY_EMAILID="select tenant_name from tenant where tenant_email=?";
 	 private static final int ROLE_ID=1;
 	 
 	public String matchPassward(PaasUserRegister paasUserRegister)
@@ -354,6 +355,48 @@ public class PaasUserRegisterAndLoginDAO {
 		return paasUser;
 	}//end of method userWithEmailPasswordExist
 
+	
+	public String getTenantNameByEmailId(String emailId) throws DataBaseOperationFailedException{
+
+		
+		LOGGER.debug(".getTenantNameByEmailId method of PaasUserRegisterDAO");
+		DataBaseConnectionFactory connectionFactory = new DataBaseConnectionFactory();
+		Connection connection=null;
+		PreparedStatement pstmt = null;
+		ResultSet result=null;
+
+		String tenantName =null;
+		try {
+			connection = connectionFactory.getConnection(MYSQL_DB);
+			
+			pstmt = (PreparedStatement) connection.prepareStatement(GET_TENANT_NAME_N_BY_EMAILID);
+			pstmt.setString(1, emailId);
+			
+			result = pstmt.executeQuery();
+			if (result.next()) {
+				
+				tenantName = result.getString("tenant_name");
+				
+				LOGGER.debug("Email and password already exist with value : "+ tenantName );
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			LOGGER.error("Unable to fetch data from regsiter table with value : "+tenantName);
+			throw new DataBaseOperationFailedException("Unable to fetch data from tenant table with value : "+emailId,e);
+		} catch(SQLException e) {
+			if(e.getErrorCode() == 1064) {
+				String message = "Unable to fetch data from tenant table because " + PAASErrorCodeExceptionHelper.exceptionFormat(PAASConstant.ERROR_IN_SQL_SYNTAX);
+				throw new DataBaseOperationFailedException(message, e);
+			} else if(e.getErrorCode() == 1146) {
+				String message = "Unable to fetch data from regsiter table because: " + PAASErrorCodeExceptionHelper.exceptionFormat(PAASConstant.TABLE_NOT_EXIST);
+				throw new DataBaseOperationFailedException(message, e);
+			} else
+				throw new DataBaseOperationFailedException("Unable to fetch data from tenant table with value : "+emailId,e);
+		} finally{
+			DataBaseHelper.dbCleanUp(connection, pstmt);			
+		}		
+		return tenantName;
+	
+	}
 	
 	 
 	public PaasUserRegister getLoginDetailsByTenantId(int tenantId) throws DataBaseOperationFailedException{

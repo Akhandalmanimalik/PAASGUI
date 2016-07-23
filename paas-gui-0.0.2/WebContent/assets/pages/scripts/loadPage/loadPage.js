@@ -45,6 +45,38 @@ function loadpage(text){
 		
 	};
 	
+	
+	if (text === 'featureresources'){
+		 
+		(function() {
+		    // Load the script
+		    var script = document.createElement("SCRIPT");
+		    script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js';
+		    script.type = 'text/javascript';
+		    document.getElementsByTagName("head")[0].appendChild(script);
+
+		})();
+	 
+		$.ajax({
+			url: "/paas-gui/rest/registerAndLoginService/featureLogin" 
+			})
+	    .success(function(data) { console.log("success");
+	     
+	    
+	    (function (global) {
+	    	 global.localStorage.setItem("sharedtenantid", data);
+	         
+	    }(window));
+	    
+        url = 'http://localhost:8080/paas-gui/html/dashboardfeature.html';
+       // document.location.href = url;
+        $("#content").attr("src", url);
+	    })
+	    .error(function() { alert("error"); })
+	    .complete(function() { alert("complete"); });
+		
+	};
+	
 
 	if (text === 'activity'){
 		$("#content").attr("src", "html/activity.html");

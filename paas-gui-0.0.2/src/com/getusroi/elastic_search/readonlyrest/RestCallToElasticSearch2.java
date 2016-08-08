@@ -19,9 +19,10 @@ import org.slf4j.LoggerFactory;
 
 import com.getusroi.elastic_search.exception.AuthenticationFailedException;
 import com.getusroi.elastic_search.exception.ConnectionFailedException;
+import com.getusroi.elastic_search.helper.ESConstant;
 import com.getusroi.paas.vo.PaasUserRegister;
 
- 
+
 
 /**
  * RestCallToElasticSearch Class.<br>
@@ -30,7 +31,7 @@ import com.getusroi.paas.vo.PaasUserRegister;
  * 
  * @author bizruntime
  */
-public class RestCallToElasticSearch {
+public class RestCallToElasticSearch2 {
 
 	protected static Logger LOGGER = LoggerFactory.getLogger(RestCallToElasticSearch.class);
 
@@ -51,9 +52,9 @@ public class RestCallToElasticSearch {
 
 		try {
 			BasicCredentialsProvider customCredentialsProvider = new BasicCredentialsProvider();
-			customCredentialsProvider.setCredentials(new AuthScope("127.0.0.1",
-					//9200), new UsernamePasswordCredentials("user3", "user3"));
+			customCredentialsProvider.setCredentials(new AuthScope(ESConstant.ES_KIBANA_IP,
 					9200), new UsernamePasswordCredentials("admin", "admin"));
+//					9200), new UsernamePasswordCredentials("user2", "user2"));
 			factory.setHttpClientConfig(new HttpClientConfig.Builder(Arrays
 					.asList("http://127.0.0.1:9200"))
 					.credentialsProvider(customCredentialsProvider)
@@ -93,7 +94,7 @@ public class RestCallToElasticSearch {
 				+ "            \"should\": [ ]" + "        }" + "    },"
 				+ "    \"from\": 0," + "    \"size\": 10,"
 				+ "    \"sort\": [ ]," + "    \"aggs\": { }" + "" + "}";
-		Search search = new Search.Builder(query).addIndex("bizruntime").build();
+		Search search = new Search.Builder(query).addIndex("google").build();
 		SearchResult result = null;
 
 		try {
@@ -109,7 +110,7 @@ public class RestCallToElasticSearch {
 		}
 		return result;
 	}
-
+	
 	public  void addIndexByTenant(PaasUserRegister tenant){
 		LOGGER.info("Inside (.) addIndexByTenant of RestCallToElasticSearch ");
 		 
@@ -127,11 +128,12 @@ public class RestCallToElasticSearch {
 	}
 	
 	public static void main(String[] args) {
-		try {
+		 
+		/*try {
 			RestCallToElasticSearch.getSearchResult();
 		} catch (ConnectionFailedException e) {
-			LOGGER.error(e.getMessage());
-		}
+			LOGGER.error(">>>>--------",e);
+		}*/
 	}
 
 }

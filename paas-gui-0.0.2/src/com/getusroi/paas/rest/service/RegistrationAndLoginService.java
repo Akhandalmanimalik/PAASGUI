@@ -2,7 +2,6 @@ package com.getusroi.paas.rest.service;
 
 import java.io.IOException;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
@@ -14,16 +13,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.getusroi.elastic_search.exception.WriteToYMLFailedException;
 import com.getusroi.elastic_search.readonlyrest.ESYMLUsers;
+import com.getusroi.elastic_search.readonlyrest.RestCallToElasticSearch;
 import com.getusroi.paas.dao.DataBaseOperationFailedException;
 import com.getusroi.paas.dao.PaasUserRegisterAndLoginDAO;
 import com.getusroi.paas.helper.PAASConstant;
@@ -58,11 +56,14 @@ public class RegistrationAndLoginService {
 				if (userExist)
 					throw new UserRegisterAndLoginServiceException(
 							"User alredy exist with enter email :  " + paasUserRegister.getEmail());
-
-				registerDAO.registerPaasUser(paasUserRegister);
+				int tenantId = registerDAO.registerPaasUser(paasUserRegister);
 				// Writting user details into yml file for dashboard credential
-				new ESYMLUsers().writeUserToYML(paasUserRegister);
-
+				if(tenantId != 0){
+					paasUserRegister.setId(tenantId);
+					new RestCallToElasticSearch().addIndexByTenant(paasUserRegister);
+					// Writting user details into yml file for dashboard credential
+					new ESYMLUsers().writeUserToYML(paasUserRegister);	
+				}	
 			} else {
 				// throw exception
 				throw new UserRegisterAndLoginServiceException("registration data is not valid :  " + registrationData);

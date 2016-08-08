@@ -6,7 +6,7 @@ app.controller("MyController", function($scope, $http) {
 	$scope.user="Test USer ";
                      /*registration controller*/
 	$scope.reg = function() {
-		alert("inside reg method of controller");
+		console.log("inside reg method of controller");
 		console.log($scope.fields);
 		var userData = JSON.stringify($scope.fields);
 

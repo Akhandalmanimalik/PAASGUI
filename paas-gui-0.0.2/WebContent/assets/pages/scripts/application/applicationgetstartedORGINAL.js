@@ -1,4 +1,4 @@
-var mycloudprovider = angular.module('applicationGetStarted', []);
+var mycloudprovider = angular.module('applicationgetstarted1', []);
 
 mycloudprovider.controller('MainCtrl', function ($scope,$http) {
 	
@@ -37,6 +37,18 @@ mycloudprovider.controller('MainCtrl', function ($scope,$http) {
    };  
    /*======================= END OF selectSubnetnew =========================*/
     
+// To get respective cidr value of subnet
+   $scope.selectCidrforSubent = function(subnet_name) {
+	   
+	   	 $scope.service.cidr;
+	  		 angular.forEach($scope.subnetObject,function(item){
+	   			   if(item.subnetName == subnet_name){
+	   				  
+	   				   $scope.service.cidr = item.cidr;
+	   				   console.log("tag"+$scope.service.cidr);
+	   			   	}
+	  		 });
+	}	// End of selectCidrforSubent
    
    /*==================POPULATE DATA TO TABLE===================*/
    
@@ -123,7 +135,11 @@ mycloudprovider.controller('MainCtrl', function ($scope,$http) {
 		     
 		  // function to process the form
 		     $scope.processForm = function() {
-		          
+		    	 $scope.blockPage=true;
+		    	 if ($scope.blockPage) {
+		    		 
+		    		 	$('#loading').show();
+		    		 }
 		    	/*angular.forEach($scope.env,function(value){
 		     		 $scope.service.env.push(value);            
 		            })*/   
@@ -144,14 +160,14 @@ mycloudprovider.controller('MainCtrl', function ($scope,$http) {
 				          console.log(userData);
 				      	  res.success(function(data, status, headers, config) {
 				      	    $scope.message = data;
-				      	    
-				      	    
+				      	  window.location.href = "applicationWizardGetStarted.html";
+		      	  
 				      	  });
 				      	  res.error(function(data, status, headers, config) {
 //				      	  	    alert("Error in storing Application Summary "+data);
 				      	  });
 				   	}
-			   	 
+			   		
 			   	  });
 			   	  res.error(function(data, status, headers, config) {
 			   	    alert("failure message : " + JSON.stringify({
@@ -161,7 +177,7 @@ mycloudprovider.controller('MainCtrl', function ($scope,$http) {
 			   	  
 			   	
 		          
-		            
+			   	$('#loading').hide(); 
 		      };
 		      
 		      //check vpcname exist or not

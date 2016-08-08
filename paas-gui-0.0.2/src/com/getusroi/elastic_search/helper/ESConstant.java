@@ -25,4 +25,5 @@ public class ESConstant {
 
 	// Path to shell file.
 	public static final String ES_SHELL_FILE = "shellFilePath";
+	public static final String ES_KIBANA_IP="172.16.2.11";			//"127.0.0.1";
 }

@@ -489,9 +489,8 @@ public class ApplicationService {
 		 try {
 
 		  Client client = Client.create();
-		  WebResource webResource = client.resource("http://172.16.2.7:8500/v1/catalog/deregister");
-		 // WebResource webResource = client.resource("http://192.168.1.104:8500/v1/catalog/deregister");
-		  
+		  /*WebResource webResource = client.resource("http://172.16.2.7:8500/v1/catalog/deregister");*/
+		  WebResource webResource = client.resource("http://192.168.1.104:8500/v1/catalog/deregister");
 		  System.out.println(webResource);
 
 		  String input = "{"+

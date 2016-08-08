@@ -31,7 +31,7 @@ import com.getusroi.paas.vo.PaasUserRegister;
  * 
  * @author bizruntime
  */
-public class ESYMLUsers {
+public class ESYMLUsers2 {
 
 	protected static Logger logger = LoggerFactory.getLogger(ESYMLUsers.class);
 
@@ -73,19 +73,21 @@ public class ESYMLUsers {
 		}
 
 		Map<String, Object> data = new LinkedHashMap<String, Object>();
-		/*data.put(ESConstant.ES_NAME, paasUserRegister.getEmail());//dynamic value of user will come in place of user3
-		data.put(ESConstant.ES_TYPE, "allow");
-		data.put(ESConstant.ES_AUTH, paasUserRegister.getEmail()+":"+paasUserRegister.getPassword());//dynamic value will come as username and password.
-		data.put(ESConstant.ES_ACCESS, "ro");
-		data.put(ESConstant.ES_INDICES,
-				new String[] { ".kibana*", "google" });*///in place of google dynamic values will come.
-		
 		data.put(ESConstant.ES_NAME, paasUserRegister.getEmail());//dynamic value of user will come in place of user3		
 		data.put(ESConstant.ES_TYPE, "allow");
 		data.put(ESConstant.ES_AUTH, paasUserRegister.getEmail()+":"+paasUserRegister.getPassword());//dynamic value will come as username and password.
+			
+//		data.put(ESConstant.ES_ACCESS, "ro");
 		data.put(ESConstant.ES_ACCESS, "rw");
+//		data.put(ESConstant.ES_ACTION, new String[] { "indices:data/read/*","indices:data/write/*","indices:admin/template/*","indices:admin/create" });
 		data.put(ESConstant.ES_INDICES, new String[] { ".kibana*",paasUserRegister.getTenant_name()});//in place of google dynamic values will come.
-		
+		/*data.put(ESConstant.ES_INDICES, new String[] { '"'+".kibana*"+'"','"'+paasUserRegister.getTenant_name()+'"'});//in place of google dynamic values will come.*/		/*data.put(ESConstant.ES_INDICES, new String[] { "\".kibana*\"","\"paasUserRegister.getTenant_name()\""});//in place of google dynamic values will come.*/
+		/*data.put(ESConstant.ES_INDICES, new String[] { " \".kibana*\" "," \"+paasUserRegister.getTenant_name()+\" "});//in place of google dynamic values will come.*/
+		/*data.put(ESConstant.ES_INDICES, new String[] { "\""+".kibana*"+"\"","\""+paasUserRegister.getTenant_name()+"\""});//in place of google dynamic values will come.*/
+		/*String kibanaString = "\".kibana*\"";
+		String tenantName = '"'+paasUserRegister.getTenant_name()+'"';
+		logger.debug("kibanaString >>> "+kibanaString+"  -----  tenantName ?>>>>>>"+tenantName);
+		data.put(ESConstant.ES_INDICES, new String[] { kibanaString,tenantName});//in place of google dynamic values will come.*/
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		list.add(data);
 
@@ -150,15 +152,30 @@ public class ESYMLUsers {
 		}
 	}
 
+	Map<String, Object> getString(){
+ 		PaasUserRegister paasUserRegister = new PaasUserRegister();
+		paasUserRegister.setTenant_name("uuu");
+		Map<String, Object> data = new LinkedHashMap<String, Object>();
+		
+		data.put(ESConstant.ES_INDICES, 
+				new String[] { "\""+".kibana*"+"\"","\""+paasUserRegister.getTenant_name()+"\""});
+		data.put(ESConstant.ES_INDICES+1, 
+				new String[] { '"'+".kibana*"+'"','"'+paasUserRegister.getTenant_name()+'"'});
+		return data;
+	}
 	//To instant Test 
 	public static void main(String[] args) {
-		PaasUserRegister paasUserRegister= new PaasUserRegister();
+		/*PaasUserRegister paasUserRegister= new PaasUserRegister();
 		paasUserRegister.setEmail("test@gmail.com");
 		paasUserRegister.setPassword("testpwd");
 		try {
 			new ESYMLUsers().writeUserToYML(paasUserRegister);
 		} catch (WriteToYMLFailedException e) {
 			logger.error(e.getMessage());
-		}
+		}*/
+		String temp=	 " \"ROM\" ";
+
+		logger.debug("temp "+temp);
+		
 	}
 }

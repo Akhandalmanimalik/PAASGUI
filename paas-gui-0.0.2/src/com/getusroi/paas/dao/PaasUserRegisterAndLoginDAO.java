@@ -71,7 +71,7 @@ public class PaasUserRegisterAndLoginDAO {
 	 * @param paasUserRegister : PaasUserRegisterVO Object type contain details require to register the user
 	 * @throws DataBaseOperationFailedException 
 	 */
-	public void registerPaasUser(PaasUserRegister paasUserRegister) throws DataBaseOperationFailedException{
+	public int registerPaasUser(PaasUserRegister paasUserRegister) throws DataBaseOperationFailedException{
 		LOGGER.debug(".registerPaasUser method of PaasUserRegisterDAO");
 		DataBaseConnectionFactory connectionFactory = new DataBaseConnectionFactory();
 		Connection connection=null;
@@ -127,7 +127,7 @@ public class PaasUserRegisterAndLoginDAO {
 		} finally{
 			DataBaseHelper.dbCleanUp(connection, pstmt);			
 		}		
-
+		return last_inserted_id;
 	}// end of method registerPaasUser
 	
 	/**
